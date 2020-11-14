@@ -1,0 +1,8 @@
+{
+  "name": "cosplay",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:sishenhei7/cosplay.git",
+  "author": "sishenhei7 <982505136@qq.com>",
+  "license": "MIT"
+}
