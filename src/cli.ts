@@ -2,7 +2,7 @@
 import { Command, Option } from 'commander'
 import chalk from 'chalk'
 import leven from 'leven'
-// import { version } from '../package.json'
+import GitHandler from './git'
 
 const program = new Command()
 
@@ -27,6 +27,22 @@ program
   .action((name, cmd) => {
     console.log('name', name)
     console.log('cmd', cleanArgs(cmd))
+  })
+
+program
+  .command('git')
+  .description('create a new repo in github and push to it')
+  .option('-n, --projectName <projectName>', 'Project name of the repository')
+  .option('-d, --projectDesc <projectDesc>', 'Description of the repository')
+  .option('-i, --install', 'Install dependencies')
+  .action(async cmd => {
+    const options = cleanArgs(cmd)
+    const git = new GitHandler({
+      name: options.projectName,
+      desc: options.projectDesc,
+      install: options.install,
+    })
+    await git.run()
   })
 
 // output help information on unknown commands

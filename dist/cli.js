@@ -9,7 +9,7 @@ Object.defineProperty(exports, '__esModule', { value: true })
 const commander_1 = require('commander')
 const chalk_1 = __importDefault(require('chalk'))
 const leven_1 = __importDefault(require('leven'))
-// import { version } from '../package.json'
+const git_1 = __importDefault(require('./git'))
 const program = new commander_1.Command()
 program.version(`cosplay ${require('../package.json').version}`).usage('<command> [options]')
 program
@@ -31,6 +31,21 @@ program
   .action((name, cmd) => {
     console.log('name', name)
     console.log('cmd', cleanArgs(cmd))
+  })
+program
+  .command('git')
+  .description('create a new repo in github and push to it')
+  .option('-n, --projectName <projectName>', 'Project name of the repository')
+  .option('-d, --projectDesc <projectDesc>', 'Description of the repository')
+  .option('-i, --install', 'Install dependencies')
+  .action(async cmd => {
+    const options = cleanArgs(cmd)
+    const git = new git_1.default({
+      name: options.projectName,
+      desc: options.projectDesc,
+      install: options.install,
+    })
+    await git.run()
   })
 // output help information on unknown commands
 program.arguments('<command>').action(cmd => {
