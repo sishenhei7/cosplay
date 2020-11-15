@@ -2,9 +2,11 @@
   "name": "cosplay",
   "version": "0.0.1",
   "description": "Command line interface for github package development",
-  "bin": {
-    "cosplay": "dist/cli.js"
-  },
+  "bin": "dist/cli.js",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
     "dev": "rm -rf dist/templates && cp -r src/templates dist && tsc --watch",
     "build": "rm -rf dist/templates && cp -r src/templates dist && tsc",
@@ -31,7 +33,7 @@
     "url": "git+https://github.com/sishenhei7/klook-page-test.git"
   },
   "author": "yangzhou",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/sishenhei7/klook-page-test/issues"
   },
