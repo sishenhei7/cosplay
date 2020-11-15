@@ -56,8 +56,6 @@ class gitHandler {
 
   async setupRepo() {
     const cwd = process.cwd()
-    spinner.start('Initializing local repository and pushing to remote...')
-
     try {
       await execa('git', ['init'], { cwd })
       await execa('git', ['add', '*'], { cwd })
@@ -66,7 +64,8 @@ class gitHandler {
       await execa('git', ['remote', 'add', 'origin', this.remoteURL], { cwd })
       await execa('git', ['push', '-u', 'origin', 'main'], { cwd })
     } finally {
-      spinner.stop()
+      console.log(chalk.red('Failed to push to remote repository!'))
+      process.exit()
     }
   }
 
@@ -98,10 +97,10 @@ class gitHandler {
       //   title: 'create remote repo',
       //   task: async () => this.createRemoteRepo(),
       // },
-      // {
-      //   title: 'set up repo',
-      //   task: async () => this.setupRepo(),
-      // },
+      {
+        title: 'set up repo',
+        task: async () => this.setupRepo(),
+      },
       {
         title: 'Install dependencies',
         task: async () => this.installDep(),
@@ -112,7 +111,6 @@ class gitHandler {
     this.checkGit()
     await this.githubAuth()
     await this.createRemoteRepo()
-    await this.setupRepo()
     await tasks.run()
     console.log(`${chalk.green('DONE')} Project ready`)
   }
