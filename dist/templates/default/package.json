@@ -6,9 +6,9 @@
     "cosplay": "dist/cli.js"
   },
   "scripts": {
-    "dev": "rm -rf dist/templates && cp -r src/templates dist && tsc --watch",
-    "build": "rm -rf dist/templates && cp -r src/templates dist && tsc",
+    "dev": "tsc --watch",
     "local": "npm install -g",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --fix",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
