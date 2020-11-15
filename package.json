@@ -30,14 +30,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sishenhei7/klook-page-test.git"
+    "url": "git+https://github.com/sishenhei7/cosplay.git"
   },
   "author": "yangzhou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sishenhei7/klook-page-test/issues"
+    "url": "https://github.com/sishenhei7/cosplay/issues"
   },
-  "homepage": "https://github.com/sishenhei7/klook-page-test#readme",
+  "homepage": "https://github.com/sishenhei7/cosplay#readme",
   "dependencies": {
     "@octokit/rest": "^18.0.9",
     "chalk": "^4.1.0",
