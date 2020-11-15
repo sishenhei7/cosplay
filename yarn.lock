@@ -329,6 +329,11 @@
   resolved "https://registry.npm.taobao.org/@types/configstore/download/@types/configstore-4.0.0.tgz#cb718f9507e9ee73782f40d07aaca1cd747e36fa"
   integrity sha1-y3GPlQfp7nN4L0DQeqyhzXR+Nvo=
 
+"@types/figlet@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/@types/figlet/-/figlet-1.2.1.tgz#ae3ba62ae70fc2aa10ac76b42541a99680b080a1"
+  integrity sha512-uw+Xmam7sMFHYyVGq5CGH/6Lu0T792bf4T6+jPFtPkWnJ9YVjLKqOLzF7DHuSo/LEHtLWleUO7Zi7EKkg6rSIg==
+
 "@types/inquirer@^7.3.1":
   version "7.3.1"
   resolved "https://registry.npm.taobao.org/@types/inquirer/download/@types/inquirer-7.3.1.tgz#1f231224e7df11ccfaf4cf9acbcc3b935fea292d"

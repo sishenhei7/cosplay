@@ -1,3 +1,4 @@
+import fs from 'fs'
 import chalk from 'chalk'
 import execa from 'execa'
 import { Listr } from 'listr2'
@@ -80,6 +81,13 @@ class gitHandler {
     }
   }
 
+  checkGit() {
+    if (fs.existsSync('.git')) {
+      console.log(chalk.red('Already a Git repository!'))
+      process.exit()
+    }
+  }
+
   async run() {
     const tasks = new Listr([
       // {
@@ -101,6 +109,7 @@ class gitHandler {
       },
     ])
 
+    this.checkGit()
     await this.githubAuth()
     await this.createRemoteRepo()
     await this.setupRepo()

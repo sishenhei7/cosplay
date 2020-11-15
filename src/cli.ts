@@ -2,7 +2,10 @@
 import { Command, Option } from 'commander'
 import chalk from 'chalk'
 import leven from 'leven'
+import figlet from 'figlet'
 import GitHandler from './git'
+
+console.log(chalk.yellow(figlet.textSync('Cosplay', { horizontalLayout: 'full' })))
 
 const program = new Command()
 
