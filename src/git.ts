@@ -7,7 +7,7 @@ import { Octokit } from '@octokit/rest'
 import spinner from './utils/spinner'
 import { askGithubCredentials, askRepoDetails } from './prompts/git'
 
-class gitHandler {
+export default class gitHandler {
   name: string
   desc: string
   isInstallDep: boolean
@@ -115,5 +115,3 @@ class gitHandler {
     console.log(`${chalk.green('DONE')} Project ready`)
   }
 }
-
-export default gitHandler

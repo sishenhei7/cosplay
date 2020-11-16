@@ -10,9 +10,8 @@ export const askGithubCredentials = () => {
       validate: function (value: string) {
         if (value.length) {
           return true
-        } else {
-          return 'Please enter your github access token.'
         }
+        return 'Please enter your github access token.'
       },
     },
   ]
@@ -30,9 +29,8 @@ export const askRepoDetails = (name: string, desc: string) => {
       validate: function (value: string) {
         if (value.length) {
           return true
-        } else {
-          return 'Please enter a name for the repository.'
         }
+        return 'Please enter a name for the repository.'
       },
     },
     {
