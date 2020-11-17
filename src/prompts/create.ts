@@ -2,8 +2,8 @@ import fs from 'fs-extra'
 import path from 'path'
 import inquirer from 'inquirer'
 
-export const askTemplateName = () => {
-  const templateChoices = fs.readdirSync(path.join(__dirname, 'templates'))
+export const askTemplateName = (templatePath: string) => {
+  const templateChoices = fs.readdirSync(templatePath)
   const questions = [
     {
       type: 'list',
