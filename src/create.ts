@@ -37,7 +37,7 @@ export default class createHandler {
     }
   }
 
-  createProject() {
+  async createProject() {
     this.projectPath = path.join(this.currentPath, this.projectName)
 
     if (fs.existsSync(this.projectPath)) {
@@ -49,31 +49,28 @@ export default class createHandler {
     fs.mkdirSync(this.projectPath)
   }
 
-  copyTemplate() {
+  async copyTemplate() {
     const renderOption = { projectName: this.projectName }
     const directoryList = ['./']
     const templateRealPath = path.join(this.templatePath, this.templateName)
     const projectRealPath = path.join(this.currentPath, this.projectName)
 
     while (directoryList.length > 0) {
-      console.log('directoryList', directoryList)
       const directory = directoryList.shift()
-      // console.log('==============');
       const filesInDirectory = fs.readdirSync(path.join(templateRealPath, directory as string))
-      // console.log('filesInDirectory', filesInDirectory);
 
       filesInDirectory.forEach(file => {
         const directoryToFile = path.join(directory as string, file)
         const filePath = path.join(templateRealPath, directoryToFile)
+        const writePath = path.join(projectRealPath, directoryToFile)
         const stats = fs.statSync(filePath)
 
         if (stats.isFile()) {
           let contents = fs.readFileSync(filePath, 'utf8')
-          const writePath = path.join(projectRealPath, directoryToFile)
-
           contents = ejs.render(contents, renderOption)
           fs.writeFileSync(writePath, contents, 'utf8')
         } else if (stats.isDirectory()) {
+          fs.mkdirSync(writePath)
           directoryList.push(directoryToFile)
         }
       })

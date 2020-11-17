@@ -1,5 +1,5 @@
 {
-  "name": "cosplay",
+  "name": "<%= projectName %>",
   "version": "1.0.0",
   "description": "Command line interface for github package development",
   "bin": {
