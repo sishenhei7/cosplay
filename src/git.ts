@@ -7,7 +7,7 @@ import { Octokit } from '@octokit/rest'
 import spinner from './utils/spinner'
 import { askGithubCredentials, askRepoDetails } from './prompts/git'
 
-export default class gitHandler {
+export class GitHandler {
   name: string
   desc: string
   isInstallDep: boolean

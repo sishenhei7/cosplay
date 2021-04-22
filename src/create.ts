@@ -7,7 +7,7 @@ import { Listr } from 'listr2'
 // import spinner from './utils/spinner'
 import { askTemplateName, askProjectName } from './prompts/create'
 
-export default class createHandler {
+export class CreateHandler {
   templateName = ''
   projectName = ''
   templateChoices: string[] = []

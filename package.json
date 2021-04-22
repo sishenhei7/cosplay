@@ -9,8 +9,8 @@
     "templates"
   ],
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
+    "dev": "tsup ./src/cli.ts ./src/perf-worker.ts --watch src",
+    "build": "tsup ./src/cli.ts ./src/perf-worker.ts --clean",
     "local": "npm install -g",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --fix",
@@ -48,11 +48,14 @@
     "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
     "leven": "^3.1.0",
+    "lighthouse": "^7.3.0",
     "listr2": "^3.2.2",
     "lodash": "^4.17.20",
     "minimist": "^1.2.5",
     "ora": "^5.1.0",
-    "touch": "^3.1.0"
+    "puppeteer-core": "^9.0.0",
+    "touch": "^3.1.0",
+    "tsup": "^4.9.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

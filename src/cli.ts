@@ -3,8 +3,9 @@ import { Command, Option } from 'commander'
 import chalk from 'chalk'
 import leven from 'leven'
 import figlet from 'figlet'
-import GitHandler from './git'
-import CreateHandler from './create'
+import { GitHandler } from './git'
+import { CreateHandler } from './create'
+import { PerformanceHandler } from './perf'
 
 console.log(chalk.yellow(figlet.textSync('Cosplay', { horizontalLayout: 'full' })))
 
@@ -39,6 +40,21 @@ program
       install: options.install,
     })
     await git.run()
+  })
+
+program
+  .command('perf <url>')
+  .description('get web performance(lcp, fcp, cls, dom-size) for a url')
+  .option('-t, --times <times>', 'Times to run')
+  .option('-c, --concurrency <concurrency>', 'concurrency for one run')
+  .action(async (url, cmd) => {
+    const options = cleanArgs(cmd)
+    const performance = new PerformanceHandler({
+      url: url,
+      times: Number(options.times),
+      concurrency: Number(options.concurrency),
+    })
+    await performance.run()
   })
 
 // output help information on unknown commands
