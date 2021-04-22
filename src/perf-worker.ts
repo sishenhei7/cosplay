@@ -24,41 +24,31 @@ const puppeteerConfig = {
   executablePath: findChrome(),
 }
 
-const lighthouseConfig = {
-  config: {
-    onlyCategories: ['performance'],
-    logLevel: 'error',
-    output: 'json',
-    throttlingMethod: 'simulate',
-    throttling: { rttMs: 28, throughputKbps: 16000, cpuSlowdownMultiplier: 4 },
-  },
-}
-
 const lighthouseOptions = {
   extends: 'lighthouse:default',
   settings: {
     maxWaitForFcp: 15 * 1000,
     maxWaitForLoad: 35 * 1000,
-    formFactor: 'desktop',
-    throttling: {
-      rttMs: 40,
-      throughputKbps: 10 * 1024,
-      cpuSlowdownMultiplier: 1,
-      requestLatencyMs: 0, // 0 means unset
-      downloadThroughputKbps: 0,
-      uploadThroughputKbps: 0,
-    },
-    screenEmulation: {
-      mobile: false,
-      width: 1350,
-      height: 940,
-      deviceScaleFactor: 1,
-      disabled: false,
-    },
-    emulatedUserAgent:
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4420.0 Safari/537.36 Chrome-Lighthouse',
-    // Skip the h2 audit so it doesn't lie to us. See https://github.com/GoogleChrome/lighthouse/issues/6539
-    skipAudits: ['uses-http2'],
+    // formFactor: 'desktop',
+    // throttling: {
+    //   rttMs: 40,
+    //   throughputKbps: 10 * 1024,
+    //   cpuSlowdownMultiplier: 1,
+    //   requestLatencyMs: 0, // 0 means unset
+    //   downloadThroughputKbps: 0,
+    //   uploadThroughputKbps: 0,
+    // },
+    throttlingMethod: 'devtools',
+    // screenEmulation: {
+    //   mobile: false,
+    //   width: 1350,
+    //   height: 940,
+    //   deviceScaleFactor: 1,
+    //   disabled: false,
+    // },
+    // emulatedUserAgent:
+    //   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4420.0 Safari/537.36 Chrome-Lighthouse',
+    onlyAudits: ['largest-contentful-paint', 'first-contentful-paint', 'cumulative-layout-shift', 'dom-size'],
   },
 }
 
@@ -69,8 +59,6 @@ const getReport = async (url: string) => {
   const lighthouseReport = await lighthouse(
     url,
     {
-      ...puppeteerConfig,
-      ...lighthouseConfig,
       port: endpointURL.port,
     },
     lighthouseOptions,

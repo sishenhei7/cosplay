@@ -41,7 +41,7 @@ export class PerformanceHandler {
     const result = resultsArr.reduce(
       (accu: any, curr: any) => {
         if (!curr || curr instanceof Error) {
-          return
+          return accu
         }
 
         webVitalKeys.forEach((key: string) => {
@@ -69,10 +69,10 @@ export class PerformanceHandler {
       `),
     )
 
-    worker.stop()
+    delete result.times
     console.log(result)
 
-    delete result.times
+    worker.stop()
     process.exit(1)
   }
 }
