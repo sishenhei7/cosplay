@@ -102,7 +102,6 @@ const runWorker = async (url: string) => {
   } catch (err) {
     console.log(chalk.red('worker ended: failed to launch lighthouse!'))
     console.log(err)
-    process.exit(0)
   }
 
   return result
