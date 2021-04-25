@@ -1,3 +1,4 @@
+import fs from 'fs'
 import axios from 'axios'
 import chalk from 'chalk'
 import sourceMap from 'source-map'
@@ -35,7 +36,11 @@ export class SourceMapHandler {
       return Promise.resolve(this.cachedCourceMap.get(link))
     }
 
-    return axios.get(link)
+    if (link.includes('https://') || link.includes('http://') || link.includes('localhost')) {
+      return axios.get(link)
+    }
+
+    return fs.promises.readFile(link, { encoding: 'utf8' }).then(res => ({ data: JSON.parse(res) }))
   }
 
   async decodeLink(link: string, line: number, column: number) {
