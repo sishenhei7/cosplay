@@ -1,5 +1,4 @@
 import os from 'os'
-import chalk from 'chalk'
 import { Worker as _Worker } from 'worker_threads'
 
 interface NodeWorker extends _Worker {
@@ -11,29 +10,30 @@ export interface Options {
   max?: number
 }
 
-export class Worker<Args extends any[]> {
-  private path!: string
-  private max!: number
-  private pool!: NodeWorker[]
-  private idlePool!: NodeWorker[]
-  private queue!: [(worker: NodeWorker) => void, (err: Error) => void][]
+export class Worker<Args extends any[], Ret = any> {
+  private path?: string
+  private code?: string
+  private max: number
+  private pool: NodeWorker[]
+  private idlePool: NodeWorker[]
+  private queue: [(worker: NodeWorker) => void, (err: Error) => void][]
 
-  constructor(path: string, options: Options = {}) {
-    this.path = path
+  constructor(pathOrFn: string | ((...args: Args) => Promise<Ret> | Ret), options: Options = {}) {
+    if (typeof pathOrFn === 'string') {
+      this.path = pathOrFn
+    } else {
+      this.code = genWorkerCode(pathOrFn)
+    }
+
     this.max = options.max || Math.max(1, os.cpus().length - 1)
     this.pool = []
     this.idlePool = []
     this.queue = []
-
-    if (!this.path) {
-      console.log(chalk.red('WorkerPool: workerPath should not be null!'))
-      process.exit(-1)
-    }
   }
 
-  async run(...args: Args) {
+  async run(...args: Args): Promise<Ret> {
     const worker = await this._getAvailableWorker()
-    return new Promise((resolve, reject) => {
+    return new Promise<Ret>((resolve, reject) => {
       worker.currentResolve = resolve
       worker.currentReject = reject
       worker.postMessage(args)
@@ -42,13 +42,13 @@ export class Worker<Args extends any[]> {
 
   stop() {
     this.pool.forEach(w => w.unref())
-    this.queue.forEach(([_, reject]) => reject(new Error('Main worker pool stopped before a worker was available.')))
+    this.queue.forEach(([, reject]) => reject(new Error('Main worker pool stopped before a worker was available.')))
     this.pool = []
     this.idlePool = []
     this.queue = []
   }
 
-  private async _getAvailableWorker() {
+  private async _getAvailableWorker(): Promise<NodeWorker> {
     // has idle one?
     if (this.idlePool.length) {
       return this.idlePool.shift()!
@@ -56,7 +56,9 @@ export class Worker<Args extends any[]> {
 
     // can spawn more?
     if (this.pool.length < this.max) {
-      const worker = new _Worker(this.path) as NodeWorker
+      const worker = this.path
+        ? (new _Worker(this.path) as NodeWorker)
+        : (new _Worker(this.code!, { eval: true }) as NodeWorker)
 
       worker.on('message', res => {
         worker.currentResolve && worker.currentResolve(res)
@@ -103,4 +105,17 @@ export class Worker<Args extends any[]> {
     // take a rest.
     this.idlePool.push(worker)
   }
+}
+
+function genWorkerCode(fn: any) {
+  return `
+const doWork = ${fn.toString()}
+
+const { parentPort } = require('worker_threads')
+
+parentPort.on('message', async (args) => {
+  const res = await doWork(...args)
+  parentPort.postMessage(res)
+})
+  `
 }
