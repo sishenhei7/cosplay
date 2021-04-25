@@ -6,6 +6,7 @@ import figlet from 'figlet'
 import { GitHandler } from './git'
 import { CreateHandler } from './create'
 import { PerformanceHandler } from './perf'
+import { SourceMapHandler } from './source-map'
 
 console.log(chalk.yellow(figlet.textSync('Cosplay', { horizontalLayout: 'full' })))
 
@@ -55,6 +56,23 @@ program
       concurrency: Number(options.concurrency),
     })
     await performance.run()
+  })
+
+program
+  .command('sourcemap <msg>')
+  .description('translate error msg by using a sourcemap')
+  .option('-p, --path <path>', 'Path to source-map')
+  .option('-l, --line <line>', 'line of the error')
+  .option('-c, --column <column>', 'column of the error')
+  .action(async (msg, cmd) => {
+    const options = cleanArgs(cmd)
+    const sourcemap = new SourceMapHandler({
+      msg: msg,
+      path: options.path,
+      line: Number(options.line),
+      column: Number(options.column),
+    })
+    await sourcemap.run()
   })
 
 // output help information on unknown commands
