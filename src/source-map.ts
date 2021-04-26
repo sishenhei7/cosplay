@@ -58,6 +58,8 @@ export class SourceMapHandler {
     return `(${result.source}:${result.line}:${result.column})`
   }
 
+  // linkString example: (http://localhost:9528/static/js/app.js.map)
+  // we should delete the bracket, and add '.map' to the end
   async replaceOneLink(linkString: string) {
     let link = linkString
 
