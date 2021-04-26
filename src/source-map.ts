@@ -22,7 +22,7 @@ export class SourceMapHandler {
   private line: number
   private column: number
   private httpReg = /\((http|https):\/\/([\w.]+\/?)\S*\)/g
-  private cachedCourceMap = new Map()
+  private cachedSourceMap = new Map()
 
   constructor(options: Options) {
     this.msg = options.msg
@@ -32,15 +32,23 @@ export class SourceMapHandler {
   }
 
   async getSourceMap(link: string) {
-    if (this.cachedCourceMap.has(link)) {
-      return Promise.resolve(this.cachedCourceMap.get(link))
+    if (this.cachedSourceMap.has(link)) {
+      return this.cachedSourceMap.get(link)
     }
+
+    let res = null
 
     if (link.includes('https://') || link.includes('http://') || link.includes('localhost')) {
-      return axios.get(link)
+      // is a request ?
+      res = await axios.get(link)
+    } else {
+      // is a file ?
+      const data = await fs.promises.readFile(link, { encoding: 'utf8' })
+      res = { data: JSON.parse(data) }
     }
 
-    return fs.promises.readFile(link, { encoding: 'utf8' }).then(res => ({ data: JSON.parse(res) }))
+    this.cachedSourceMap.set(link, res)
+    return res
   }
 
   async decodeLink(link: string, line: number, column: number) {
