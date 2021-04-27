@@ -73,6 +73,6 @@ export class PerformanceHandler {
     console.log(result)
 
     worker.stop()
-    process.exit(1)
+    process.exit()
   }
 }

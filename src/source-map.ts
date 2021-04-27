@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { resolve } from 'path'
 import axios from 'axios'
 import chalk from 'chalk'
 import sourceMap from 'source-map'
@@ -42,9 +43,15 @@ export class SourceMapHandler {
       // is a request ?
       res = await axios.get(link)
     } else {
-      // is a file ?
-      const data = await fs.promises.readFile(link, { encoding: 'utf8' })
-      res = { data: JSON.parse(data) }
+      // is a file path ?
+      try {
+        const data = await fs.promises.readFile(resolve(link), { encoding: 'utf8' })
+        res = { data: JSON.parse(data) }
+      } catch (error) {
+        spinner.stop()
+        console.log(chalk.red(`Failed to parse ${link}: ${error.message}`))
+        process.exit(1)
+      }
     }
 
     this.cachedSourceMap.set(link, res)

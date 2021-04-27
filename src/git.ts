@@ -65,7 +65,7 @@ export class GitHandler {
       await execa('git', ['push', '-u', 'origin', 'main'], { cwd })
     } finally {
       console.log(chalk.red('Failed to push to remote repository!'))
-      process.exit()
+      process.exit(1)
     }
   }
 
@@ -83,7 +83,7 @@ export class GitHandler {
   checkGit() {
     if (fs.existsSync('.git')) {
       console.log(chalk.red('Already a Git repository!'))
-      process.exit()
+      process.exit(1)
     }
   }
 
