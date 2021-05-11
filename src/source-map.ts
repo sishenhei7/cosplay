@@ -79,11 +79,19 @@ export class SourceMapHandler {
     }
 
     const linkArr = link.split(':')
-    link = linkArr.slice(0, 3).join(':')
+    link = linkArr.slice(0, -2).join(':')
     link = `${link}.map`
 
-    const line = Number(linkArr[3])
-    const column = Number(linkArr[4])
+    const tail = linkArr.slice(-2)
+    const line = Number(tail[0])
+    const column = Number(tail[1])
+
+    // 如果行数和列数都不是有效数字，则抛出错误
+    if (Number.isNaN(line) || Number.isNaN(column)) {
+      console.log(chalk.red(`Invalid line or column: ${linkString}`))
+      process.exit(1)
+    }
+
     const result = this.decodeLink(link, line, column)
 
     return result
